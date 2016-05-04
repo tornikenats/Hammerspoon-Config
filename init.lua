@@ -15,8 +15,8 @@ local ctrl_alt_shift = {"ctrl", "alt", "shift"}
 local cmd_shift = {"cmd", "shift"}
 local ctrl_shift = {"ctrl", "shift"}
 local cmd_alt_ctrl = {"cmd", "alt", "ctrl"}
-local main_monitor = "EPSON PJ"
-local second_monitor = "DELL U2715H"
+local main_monitor = hs.screen.allScreens()[1]
+local second_monitor = hs.screen.allScreens()[2]
 
 --------------------------------------------------------------------------------
 -- CONFIGURATIONS
@@ -75,14 +75,14 @@ function config()
   hs.hotkey.bind(ctrl_shift, "1", function()
     local win = hs.window.focusedWindow()
     if (win) then
-      win:moveToScreen(hs.screen.get(second_monitor))
+      win:moveToScreen(second_monitor)
     end
   end)
 
   hs.hotkey.bind(ctrl_shift, "2", function()
     local win = hs.window.focusedWindow()
     if (win) then
-      win:moveToScreen(hs.screen.get(main_monitor))
+      win:moveToScreen(main_monitor)
     end
   end)
 
