@@ -15,8 +15,8 @@ pom.var = {
 
 function update()
   seconds = hs.timer.secondsSinceEpoch() - pom.var.start_time
-  minutes = seconds / 60
-  hours = minutes / 60
+  minutes, seconds = seconds /% 60
+  hours, minutes = minutes /% 60
   pom.var.menubar:setTitle(hours .. ":" .. minutes .. ":" .. seconds)
 end 
 
