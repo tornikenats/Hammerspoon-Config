@@ -15,7 +15,7 @@ pom.var = {
 }
 
 function update()
-  if pom.var.start_date != os.date("%F") then
+  if pom.var.start_date ~= os.date("%F") then
     pom.var.sec_elapsed = 0
     pom.var.start_date = os.date("%F")
   end
@@ -23,7 +23,7 @@ function update()
   pom.var.sec_elapsed = pom.var.sec_elapsed + 1
   hours = pom.var.sec_elapsed // (60*60)
   minutes = pom.var.sec_elapsed % (60*60) // 60
-  seconds = pom.var.sec_elapsed % (60*60*60)
+  seconds = pom.var.sec_elapsed % (60*60*60*60)
   pom.var.menubar:setTitle(string.format("%02d:%02d:%02d", hours, minutes, seconds))
 end 
 
