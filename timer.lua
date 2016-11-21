@@ -14,10 +14,10 @@ pom.var = {
 }
 
 function update()
-  seconds = seconds + 1
-  hours = seconds // (60*60)
-  minutes = seconds % (60*60) // 60
-  seconds = seconds % (60*60)
+  pom.var.sec_elapsed = pom.var.sec_elapsed + 1
+  hours = pom.var.sec_elapsed // (60*60)
+  minutes = pom.var.sec_elapsed % (60*60) // 60
+  seconds = pom.var.sec_elapsed % (60*60)
   pom.var.menubar:setTitle(string.format("%02d:%02d:%02d", hours, minutes, seconds))
 end 
 
