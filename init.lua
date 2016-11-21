@@ -1,9 +1,6 @@
---------------------------------------------------------------------------------
--- rtoshiro - https://github.com/rtoshiro
--- You should see: http://www.hammerspoon.org/docs/index.html
---------------------------------------------------------------------------------
 require "pomodoro"
 require "timer"
+
 --------------------------------------------------------------------------------
 -- CONSTANTS
 --------------------------------------------------------------------------------
@@ -24,6 +21,10 @@ local second_monitor = hs.screen.allScreens()[2]
 hs.window.animationDuration = 0
 
 function config()
+  hs.hotkey.bind(cmd, "escape", function() 
+    hs.caffeinate.systemSleep()
+  end)
+
     -- SIZING SHORTCUTS
   hs.hotkey.bind(alt, "w", function()
     local win = hs.window.focusedWindow()

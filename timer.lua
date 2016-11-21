@@ -52,11 +52,9 @@ end
 
 function sleepWatch(eventType)
 	if eventType == hs.caffeinate.watcher.systemWillSleep or eventType == hs.caffeinate.watcher.systemWillPowerOff then
-    print("bye")
-		pom.timer.stop()
+		pom.timer:stop()
 	elseif eventType == hs.caffeinate.watcher.systemDidWake then
-		hs.alert.show("Waking up!")
-		pom.timer.start()
+		pom.timer:start()
 	end
 end
 
