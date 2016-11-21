@@ -42,6 +42,7 @@ end
 function pom_disable()
   pom.var.enabled = false
   pom.var.menubar:setTitle("stopped")
+  hs.caffeinate.watcher.new(sleepWatch):start()
 end
 
 function create_menu()
@@ -50,17 +51,14 @@ function create_menu()
 end
 
 function sleepWatch(eventType)
-	if (eventType == hs.caffeinate.watcher.systemWillSleep) then
+	if eventType == hs.caffeinate.watcher.systemWillSleep or eventType == hs.caffeinate.watcher.systemWillPowerOff then
     print("bye")
-		hs.alert.show("Going to sleep!")
-	elseif (eventType == hs.caffeinate.watcher.systemDidWake) then
+		pom.timer.stop()
+	elseif eventType == hs.caffeinate.watcher.systemDidWake then
 		hs.alert.show("Waking up!")
-    print("hi")
+		pom.timer.start()
 	end
 end
-
-local sleepWatcher = hs.caffeinate.watcher.new(sleepWatch)
-sleepWatcher:start()
 
 create_menu()
 pom_enable()
