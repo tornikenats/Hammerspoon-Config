@@ -42,12 +42,12 @@ end
 function pom_disable()
   pom.var.enabled = false
   pom.var.menubar:setTitle("stopped")
-  hs.caffeinate.watcher.new(sleepWatch):start()
 end
 
 function create_menu()
   pom.var.menubar = hs.menubar.new()
   pom.var.menubar:setTitle("loading...")
+  hs.caffeinate.watcher.new(sleepWatch):start()  
 end
 
 function sleepWatch(eventType)
