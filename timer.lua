@@ -18,7 +18,6 @@ function update()
   hours = seconds // (60*60)
   minutes = seconds % (60*60) // 60
   seconds = seconds % (60*60)
-  hours, minutes = minutes /% 60
   pom.var.menubar:setTitle(hours .. ":" .. minutes .. ":" .. seconds)
 end 
 
