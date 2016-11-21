@@ -10,15 +10,15 @@ pom.config = {
 pom.var = { 
   is_active        = false,
   menubar          = nil,
-  start_time       = 0
+  sec_elapsed      = 0
 }
 
 function update()
-  seconds = hs.timer.secondsSinceEpoch() - pom.var.start_time
+  seconds = seconds + 1
   hours = seconds // (60*60)
   minutes = seconds % (60*60) // 60
   seconds = seconds % (60*60)
-  pom.var.menubar:setTitle(hours .. ":" .. minutes .. ":" .. seconds)
+  pom.var.menubar:setTitle(string.format("%02d:%02d:%02d", hours, minutes, seconds))
 end 
 
 function pom_enable()
@@ -27,7 +27,7 @@ function pom_enable()
   end
 
   pom.var.enabled = true
-  pom.var.start_time = hs.timer.secondsSinceEpoch()
+  pom.var.sec_elapsed = 0
   pom_timer = hs.timer.new(pom.config.refresh, update)
   pom_timer:start()
 end
