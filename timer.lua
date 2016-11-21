@@ -18,7 +18,7 @@ function update()
   seconds = elapsed / 1000
   minutes = seconds / 60
   hours = minutes / 60
-  pom.var.menubar:setTitle(hours + ":" + minutes + ":" + seconds)
+  pom.var.menubar:setTitle(hours .. ":" .. minutes .. ":" .. seconds)
 end 
 
 function pom_enable()
