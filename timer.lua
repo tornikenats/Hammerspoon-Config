@@ -23,7 +23,7 @@ function update()
   pom.var.sec_elapsed = pom.var.sec_elapsed + 1
   hours = pom.var.sec_elapsed // (60*60)
   minutes = pom.var.sec_elapsed // 60 % 60
-  seconds = pom.var.sec_elapsed % 59
+  seconds = pom.var.sec_elapsed % 60
   pom.var.menubar:setTitle(string.format("%02d:%02d:%02d", hours, minutes, seconds))
 end 
 
@@ -51,9 +51,11 @@ end
 
 function sleepWatch(eventType)
 	if (eventType == hs.caffeinate.watcher.systemWillSleep) then
+    print("bye")
 		hs.alert.show("Going to sleep!")
 	elseif (eventType == hs.caffeinate.watcher.systemDidWake) then
 		hs.alert.show("Waking up!")
+    print("hi")
 	end
 end
 
