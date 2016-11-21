@@ -1,4 +1,3 @@
--- Pomodoro module
 
 --------------------------------------------------------------------------------
 -- Configuration variables
@@ -50,6 +49,19 @@ function update()
   pom.var.time_left = pom.var.time_left - pom.config.refresh
 
   if pom.var.time_left < 0 then
+    hs.sound.getByFile("/System/Library/Sounds/Basso.aiff"):play()
+    text = ''
+    if pom.var.mode == 'work' then
+      text = 'You can Relax now!'
+    elseif pom.var.mode == 'rest' then
+      text = 'You can Work now!'
+    else
+      text = 'Do whatever you want!'
+    end
+    hs.notify.new({
+        title="Timer done!",
+        informativeText=text
+    }):send()
     pom_disable()
   end
 
@@ -68,17 +80,6 @@ function update()
   draw(pom.bar.c_used, 0, offset, pom.bar.color_time_used)
 
   pom.var.menubar:setTitle(pom.var.mode .. " " .. (math.ceil(time_ratio * 100)) .. "%")
-end
-
-function create_menu()
-  pom.var.menubar = hs.menubar.new()
-  pom.var.menubar:setTitle("stopped")
-  pom.var.menubar:setMenu({
-      { title="Start work", fn=work },
-      { title="Start rest", fn=rest },
-      { title="Start custom", fn=custom },
-      { title="Stop", fn=pom_disable}
-    })
 end
 
 function custom()
@@ -142,4 +143,23 @@ function pom_disable()
   pom.var.menubar:setTitle("stopped")
 end
 
+function create_menu()
+  pom.var.menubar = hs.menubar.new()
+  pom.var.menubar:setTitle("stopped")
+  pom.var.menubar:setMenu({
+      { title="Start work", fn=work },
+      { title="Start rest", fn=rest },
+      { title="Start custom", fn=custom },
+      { title="Stop", fn=pom_disable}
+    })
+end
+
+function create_url_events()
+  hs.urlevent.bind("start_work", work)
+  hs.urlevent.bind("start_rest", rest)
+  hs.urlevent.bind("start_custom", custom)
+  hs.urlevent.bind("stop", pom_disable)
+end
+
 create_menu()
+create_url_events()

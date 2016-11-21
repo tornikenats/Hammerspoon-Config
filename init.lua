@@ -3,7 +3,7 @@
 -- You should see: http://www.hammerspoon.org/docs/index.html
 --------------------------------------------------------------------------------
 require "pomodoro"
-
+require "timer"
 --------------------------------------------------------------------------------
 -- CONSTANTS
 --------------------------------------------------------------------------------
@@ -72,17 +72,17 @@ function config()
 
   -- FOCUS SHORTCUTS
 
-  hs.hotkey.bind(ctrl_shift, "1", function()
-    local win = hs.window.focusedWindow()
-    if (win) then
-      win:moveToScreen(second_monitor)
-    end
-  end)
-
-  hs.hotkey.bind(ctrl_shift, "2", function()
+  hs.hotkey.bind(alt, "1", function()
     local win = hs.window.focusedWindow()
     if (win) then
       win:moveToScreen(main_monitor)
+    end
+  end)
+
+  hs.hotkey.bind(alt, "2", function()
+    local win = hs.window.focusedWindow()
+    if (win) then
+      win:moveToScreen(second_monitor)
     end
   end)
 
@@ -112,9 +112,13 @@ function config()
 
 -- APPLICATION SHORTCUTS
 
-  hs.hotkey.bind(cmd_shift, "1", function() 
+  hs.hotkey.bind(cmd_shift, "=", function() 
     hs.application.launchOrFocus('Finder') 
     hs.application.get("Finder"):selectMenuItem({"Window", "Bring All to Front"})
+  end)
+
+  hs.hotkey.bind(cmd_shift, "1", function() 
+    hs.application.launchOrFocus('Google Chrome') 
   end)
 
   hs.hotkey.bind(cmd, "1", function() 
