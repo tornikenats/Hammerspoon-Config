@@ -15,16 +15,21 @@ pom.var = {
 }
 
 function update()
-  if pom.var.start_date ~= os.date("%F") then
-    pom.var.sec_elapsed = 0
-    pom.var.start_date = os.date("%F")
-  end
-
   pom.var.sec_elapsed = pom.var.sec_elapsed + 1
   hours = pom.var.sec_elapsed // (60*60)
   minutes = pom.var.sec_elapsed // 60 % 60
   seconds = pom.var.sec_elapsed % 60
   pom.var.menubar:setTitle(string.format("%02d:%02d:%02d", hours, minutes, seconds))
+
+  if pom.var.start_date ~= os.date("%F") then
+    -- Save statistics
+    stat_file = io.open("stats.txt", "a")
+    stat_file:write(pom.var.start_date .. ": " .. string.format("%02d:%02d:%02d", hours, minutes, seconds))
+    stat_file:flush()
+    stat_file:close()
+    pom.var.sec_elapsed = 0
+    pom.var.start_date = os.date("%F")
+  end
 end 
 
 function pom_enable()
