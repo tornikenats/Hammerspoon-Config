@@ -24,7 +24,7 @@ function update()
   if pom.var.start_date ~= os.date("%F") then
     -- Save statistics
     stat_file = io.open("stats.txt", "a")
-    stat_file:write(pom.var.start_date .. ": " .. string.format("%02d:%02d:%02d", hours, minutes, seconds))
+    stat_file:write(pom.var.start_date .. ": " .. string.format("%02d:%02d:%02d", hours, minutes, seconds) .. "\n")
     stat_file:flush()
     stat_file:close()
     pom.var.sec_elapsed = 0
