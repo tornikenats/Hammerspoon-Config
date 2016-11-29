@@ -1,4 +1,4 @@
-require "pomodoro"
+-- require "pomodoro"
 require "timer"
 
 --------------------------------------------------------------------------------
@@ -145,12 +145,6 @@ function config()
   hs.hotkey.bind(cmd_shift, "C", function() 
     hs.application.launchOrFocus('Calendar') 
   end)
-
-
-  -- pomodoro key binding
-  hs.hotkey.bind(ctrl_alt, '[', function() pom_enable() end)
-  hs.hotkey.bind(ctrl_alt, ']', function() pom_disable() end)
-  hs.hotkey.bind(ctrl_alt_shift, ']', function() pom_reset_work() end)
 end
 
 --------------------------------------------------------------------------------
