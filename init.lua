@@ -1,6 +1,4 @@
--- require "pomodoro"
-require "timer"
-
+require "pomodoro"
 --------------------------------------------------------------------------------
 -- CONSTANTS
 --------------------------------------------------------------------------------
@@ -128,6 +126,10 @@ function config()
 
   hs.hotkey.bind(cmd, "2", function() 
     hs.application.launchOrFocus('iTerm') 
+  end)
+
+  hs.hotkey.bind(cmd_shift, "2", function() 
+    hs.application.launchOrFocus('Terminal') 
   end)
 
   hs.hotkey.bind(cmd, "3", function() 
