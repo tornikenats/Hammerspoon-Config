@@ -1,6 +1,4 @@
 require "pomodoro"
-require "timer"
-
 --------------------------------------------------------------------------------
 -- CONSTANTS
 --------------------------------------------------------------------------------
@@ -131,6 +129,10 @@ function config()
     hs.application.launchOrFocus('iTerm') 
   end)
 
+  hs.hotkey.bind(cmd_shift, "2", function() 
+    hs.application.launchOrFocus('Terminal') 
+  end)
+
   hs.hotkey.bind(cmd, "3", function() 
     hs.application.launchOrFocus('Visual Studio Code') 
   end)
@@ -146,12 +148,6 @@ function config()
   hs.hotkey.bind(cmd_shift, "C", function() 
     hs.application.launchOrFocus('Calendar') 
   end)
-
-
-  -- pomodoro key binding
-  hs.hotkey.bind(ctrl_alt, '[', function() pom_enable() end)
-  hs.hotkey.bind(ctrl_alt, ']', function() pom_disable() end)
-  hs.hotkey.bind(ctrl_alt_shift, ']', function() pom_reset_work() end)
 end
 
 --------------------------------------------------------------------------------
