@@ -6,6 +6,7 @@ require "timer"
 --------------------------------------------------------------------------------
 local cmd = {"cmd"}
 local alt = {"alt"}
+local alt_shift = {"alt", "shift"}
 local cmd_alt = {"cmd", "alt"}
 local ctrl_alt = {"ctrl", "alt"}
 local ctrl_alt_shift = {"ctrl", "alt", "shift"}
@@ -73,14 +74,14 @@ function config()
 
   -- FOCUS SHORTCUTS
 
-  hs.hotkey.bind(alt, "1", function()
+  hs.hotkey.bind(alt_shift, "1", function()
     local win = hs.window.focusedWindow()
     if (win) then
       win:moveToScreen(main_monitor)
     end
   end)
 
-  hs.hotkey.bind(alt, "2", function()
+  hs.hotkey.bind(alt_shift, "2", function()
     local win = hs.window.focusedWindow()
     if (win) then
       win:moveToScreen(second_monitor)
