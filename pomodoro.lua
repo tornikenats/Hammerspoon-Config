@@ -4,9 +4,9 @@
 --------------------------------------------------------------------------------
 local pom={}
 pom.bar = {
-  indicator_height = 0.1, -- ratio from the height of the menubar (0..1)
-  indicator_alpha  = 1,
-  indicator_in_all_spaces = true,
+  indicator_height          = 0.1, -- ratio from the height of the menubar (0..1)
+  indicator_alpha           = 1,
+  indicator_in_all_spaces   = true,
   color_time_remaining      = hs.drawing.color.green,
   color_time_remaining_rest = hs.drawing.color.x11.deepskyblue,
   color_time_remaining_custom = hs.drawing.color.x11.gold,
@@ -17,18 +17,21 @@ pom.bar = {
 }
 
 pom.config = {
-  enable_color_bar = true,
-  work_period_sec  = 25 * 60,
-  rest_period_sec  = 5 * 60,
-  refresh = 1 -- seconds
+  enable_color_bar          = true,
+  work_period_sec           = 25 * 60,
+  rest_period_sec           = 5 * 60,
+  long_rest_period_sec      = 15 * 60,
+  total_rest_count          = 4,
+  refresh                   = 1 -- seconds
 }
 
 pom.var = { 
-  is_active        = false,
-  mode             = "work", -- {"work", "rest"}
-  time_left        = pom.config.work_period_sec,
-  max_time_sec     = pom.config.work_period_sec,
-  menubar          = nil
+  is_active                 = false,
+  mode                      = "work", -- {"work", "rest"}
+  time_left                 = pom.config.work_period_sec,
+  max_time_sec              = pom.config.work_period_sec,
+  rest_count                = 0,
+  menubar                   = nil
 }
 
 function draw(target, offset, width, fill_color)
@@ -49,20 +52,19 @@ function update()
   pom.var.time_left = pom.var.time_left - pom.config.refresh
 
   if pom.var.time_left < 0 then
-    hs.sound.getByFile("/System/Library/Sounds/Basso.aiff"):play()
-    text = ''
-    if pom.var.mode == 'work' then
-      text = 'You can Relax now!'
-    elseif pom.var.mode == 'rest' then
-      text = 'You can Work now!'
-    else
-      text = 'Do whatever you want!'
-    end
+    pom_disable()
     hs.notify.new({
-        title="Timer done!",
+        title="Finished!",
         informativeText=text
     }):send()
-    pom_disable()
+
+    if pom.var.mode == 'work' then
+      text = 'Relax now!'
+      start_rest()
+    elseif pom.var.mode == 'rest' then
+      text = 'Work now!'
+      start_work()
+    end
   end
 
   screen = hs.screen.mainScreen()
@@ -74,36 +76,27 @@ function update()
     draw(pom.bar.c_left, offset, width, pom.bar.color_time_remaining)
   elseif pom.var.mode == "rest" then
     draw(pom.bar.c_left, offset, width, pom.bar.color_time_remaining_rest)
-  elseif pom.var.mode == "custom" then
-    draw(pom.bar.c_left, offset, width, pom.bar.color_time_remaining_custom)
   end
   draw(pom.bar.c_used, 0, offset, pom.bar.color_time_used)
 
   pom.var.menubar:setTitle(pom.var.mode .. " " .. (math.ceil(time_ratio * 100)) .. "%")
 end
 
-function custom()
-  chooser = hs.chooser.new(function() end)
-  chooser:show()
-  chooser:queryChangedCallback(function(query)
-    if string.find(query, ";") then
-      mins_str = string.sub(query, 0, -2) -- remove ;
-      pom.config.custom_period_sec = tonumber(mins_str) * 60
-      chooser:hide()
-      chooser:delete()
-      pom.var.mode = "custom"
-      pom_enable()
-    end
-  end)
-end
-
-function work()
+function start_work()
   pom.var.mode = "work"
   pom_enable()
 end
 
-function rest()
+function start_rest()
   pom.var.mode = "rest"
+  pom.var.rest_count = pom.var.rest_count + 1
+
+  -- Long rest every 4 rests
+  if pom.var.rest_count > pom.var.total_rest_count then
+    pom.var.max_time_sec = pom.config.rest_period_sec
+    pom.var.time_left = pom.config.rest_period_sec
+  end
+
   pom_enable()
 end
 
@@ -121,9 +114,6 @@ function pom_enable()
   if pom.var.mode == "work" then
     pom.var.max_time_sec = pom.config.work_period_sec
     pom.var.time_left = pom.config.work_period_sec
-  elseif pom.var.mode == "custom" then
-    pom.var.max_time_sec = pom.config.custom_period_sec
-    pom.var.time_left = pom.config.custom_period_sec
   elseif pom.var.mode == "rest" then
     pom.var.max_time_sec = pom.config.rest_period_sec
     pom.var.time_left = pom.config.rest_period_sec
@@ -140,24 +130,20 @@ function pom_disable()
   pom.bar.c_used:delete()
   pom.bar.c_used = nil
   pom.var.enabled = false
-  pom.var.menubar:setTitle("stopped")
+  pom.var.menubar:setTitle("Pomodoro")
 end
 
 function create_menu()
   pom.var.menubar = hs.menubar.new()
-  pom.var.menubar:setTitle("stopped")
+  pom.var.menubar:setTitle("Pomodoro")
   pom.var.menubar:setMenu({
-      { title="Start work", fn=work },
-      { title="Start rest", fn=rest },
-      { title="Start custom", fn=custom },
+      { title="Start", fn=start_work },
       { title="Stop", fn=pom_disable}
     })
 end
 
 function create_url_events()
-  hs.urlevent.bind("start_work", work)
-  hs.urlevent.bind("start_rest", rest)
-  hs.urlevent.bind("start_custom", custom)
+  hs.urlevent.bind("start", work)
   hs.urlevent.bind("stop", pom_disable)
 end
 
