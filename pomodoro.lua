@@ -92,7 +92,7 @@ function start_rest()
   pom.var.rest_count = pom.var.rest_count + 1
 
   -- Long rest every 4 rests
-  if pom.var.rest_count > pom.var.total_rest_count then
+  if pom.var.rest_count > pom.config.total_rest_count then
     pom.var.max_time_sec = pom.config.rest_period_sec
     pom.var.time_left = pom.config.rest_period_sec
   end
