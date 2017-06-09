@@ -133,8 +133,8 @@ function config()
     hs.application.launchOrFocus('Terminal') 
   end)
 
-  hs.hotkey.bind(cmd, "3", function() 
-    hs.application.launchOrFocus('Visual Studio Code') 
+  hs.hotkey.bind(cmd, "3", function()
+    hs.application.launchOrFocus('Visual Studio Code')
   end)
 
   hs.hotkey.bind(cmd, "4", function() 
@@ -153,6 +153,25 @@ end
 --------------------------------------------------------------------------------
 -- METHODS - BECAREFUL :)
 --------------------------------------------------------------------------------
+
+function launchOrFocusWindowOnMainScreen(name)
+  app = hs.application.get(name)
+  if app == nil then
+    app = hs.application.open(name)
+  end
+
+  print(tostring(#app:allWindows()))
+  if #app:allWindows() == 1 then
+    print('hi')
+    app:activate()
+  end
+
+  for _, w in pairs(app:allWindows()) do
+    if w:screen() == hs.screen.mainScreen() then
+      w:focus()
+    end
+  end
+end
 
 function hs.screen.get(screen_name)
   local allScreens = hs.screen.allScreens()
