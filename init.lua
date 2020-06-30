@@ -4,7 +4,6 @@ require "pomodoro"
 --------------------------------------------------------------------------------
 local cmd = {"cmd"}
 local alt = {"alt"}
-local alt_shift = {"alt", "shift"}
 local cmd_alt = {"cmd", "alt"}
 local ctrl_alt = {"ctrl", "alt"}
 local ctrl_alt_shift = {"ctrl", "alt", "shift"}
@@ -72,14 +71,14 @@ function config()
 
   -- FOCUS SHORTCUTS
 
-  hs.hotkey.bind(alt_shift, "1", function()
+  hs.hotkey.bind(alt, "2", function()
     local win = hs.window.focusedWindow()
     if (win) then
       win:moveToScreen(main_monitor)
     end
   end)
 
-  hs.hotkey.bind(alt_shift, "2", function()
+  hs.hotkey.bind(alt, "1", function()
     local win = hs.window.focusedWindow()
     if (win) then
       win:moveToScreen(second_monitor)
@@ -133,8 +132,8 @@ function config()
     hs.application.launchOrFocus('Terminal') 
   end)
 
-  hs.hotkey.bind(cmd, "3", function()
-    hs.application.launchOrFocus('Visual Studio Code')
+  hs.hotkey.bind(cmd, "3", function() 
+    hs.application.launchOrFocus('Visual Studio Code') 
   end)
 
   hs.hotkey.bind(cmd, "4", function() 
@@ -153,25 +152,6 @@ end
 --------------------------------------------------------------------------------
 -- METHODS - BECAREFUL :)
 --------------------------------------------------------------------------------
-
-function launchOrFocusWindowOnMainScreen(name)
-  app = hs.application.get(name)
-  if app == nil then
-    app = hs.application.open(name)
-  end
-
-  print(tostring(#app:allWindows()))
-  if #app:allWindows() == 1 then
-    print('hi')
-    app:activate()
-  end
-
-  for _, w in pairs(app:allWindows()) do
-    if w:screen() == hs.screen.mainScreen() then
-      w:focus()
-    end
-  end
-end
 
 function hs.screen.get(screen_name)
   local allScreens = hs.screen.allScreens()
