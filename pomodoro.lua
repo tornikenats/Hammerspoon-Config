@@ -24,11 +24,11 @@ pom.config = {
 }
 
 pom.var = { 
-  is_active        = false,
+  enabled          = false,
   mode             = "work", -- {"work", "rest"}
   time_left        = pom.config.work_period_sec,
   max_time_sec     = pom.config.work_period_sec,
-  menubar          = nil
+  menubar          = hs.menubar.new()
 }
 
 function draw(target, offset, width, fill_color)
@@ -109,8 +109,20 @@ function rest()
   pom_enable()
 end
 
+function pause()
+  pom.var.paused = true
+  pom_disable()
+  pom.var.enabled = true
+  create_menu()
+end
+
+function resume()
+  pom.var.enabled = false
+  pom_enable()
+  create_menu()
+end
+
 function pom_enable()
-  print("pom_enable()")
   if pom.var.enabled then
     return
   end
@@ -120,7 +132,10 @@ function pom_enable()
   pom.bar.c_left = hs.drawing.rectangle(hs.geometry.rect(0,0,0,0))
   pom.bar.c_used = hs.drawing.rectangle(hs.geometry.rect(0,0,0,0))
 
-  if pom.var.mode == "work" then
+  if pom.var.paused then
+    -- do nothing, the remaining time should continue
+    pom.var.paused = false
+  elseif pom.var.mode == "work" then
     pom.var.max_time_sec = pom.config.work_period_sec
     pom.var.time_left = pom.config.work_period_sec
   elseif pom.var.mode == "custom" then
@@ -132,6 +147,7 @@ function pom_enable()
   end
   pom_timer = hs.timer.new(pom.config.refresh, update)
   pom_timer:start()
+  create_menu()
 end
 
 function pom_disable()
@@ -146,14 +162,22 @@ function pom_disable()
 end
 
 function create_menu()
-  pom.var.menubar = hs.menubar.new()
   pom.var.menubar:setTitle("Pomodoro")
-  pom.var.menubar:setMenu({
-      { title="Start work", fn=work },
-      { title="Start rest", fn=rest },
-      { title="Start custom", fn=custom },
-      { title="Stop", fn=pom_disable}
-    })
+  options = {
+    { title="Start work", fn=work },
+    { title="Start rest", fn=rest },
+    { title="Start custom", fn=custom },
+    { title="Stop", fn=pom_disable}
+  }
+
+  -- insert resume/pause options conditionally
+  if pom.var.enabled and not pom.var.paused then
+    table.insert(options, 4, {title="Pause", fn=pause})
+  elseif pom.var.enabled and pom.var.paused then
+    table.insert(options, 4, {title="Resume", fn=resume})
+  end
+
+  pom.var.menubar:setMenu(options)
 end
 
 function create_url_events()
