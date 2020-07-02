@@ -110,8 +110,8 @@ function rest()
 end
 
 function pause()
-  pom.var.paused = true
   pom_disable()
+  pom.var.paused = true
   pom.var.enabled = true
   create_menu()
 end
@@ -119,6 +119,12 @@ end
 function resume()
   pom.var.enabled = false
   pom_enable()
+  create_menu()
+end
+
+function stop()
+  pom.var.paused = false
+  pom_disable()
   create_menu()
 end
 
@@ -167,7 +173,7 @@ function create_menu()
     { title="Start work", fn=work },
     { title="Start rest", fn=rest },
     { title="Start custom", fn=custom },
-    { title="Stop", fn=pom_disable}
+    { title="Stop", fn=stop}
   }
 
   -- insert resume/pause options conditionally
