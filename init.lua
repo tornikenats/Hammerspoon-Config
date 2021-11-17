@@ -26,6 +26,7 @@ function config()
     -- SIZING SHORTCUTS
   hs.hotkey.bind(alt, "w", function()
     local win = hs.window.focusedWindow()
+    hs.inspect(win)
     win:right()
   end)
 
@@ -153,6 +154,8 @@ end
 -- METHODS - BECAREFUL :)
 --------------------------------------------------------------------------------
 
+local windowMT = hs.getObjectMetatable("hs.window")
+
 function hs.screen.get(screen_name)
   local allScreens = hs.screen.allScreens()
   for i, screen in ipairs(allScreens) do
@@ -167,7 +170,7 @@ end
 -- |        |  HERE  |
 -- |        |        |
 -- +-----------------+
-function hs.window.right(win)
+function windowMT.right(win)
   local frame = win:screen():frame()
   frame.x = frame.x + frame.w/2
   frame.w = frame.w/2
@@ -179,7 +182,7 @@ end
 -- |  HERE  |        |
 -- |        |        |
 -- +-----------------+
-function hs.window.left(win)
+function windowMT.left(win)
   local frame = win:screen():frame()
   frame.w = frame.w/2
   win:setFrame(frame)
@@ -190,7 +193,7 @@ end
 -- +-----------------+
 -- |                 |
 -- +-----------------+
-function hs.window.up(win)
+function windowMT.up(win)
   local frame = win:screen():frame()
   frame.h = frame.h/2
   win:setFrame(frame)
@@ -201,7 +204,7 @@ end
 -- +-----------------+
 -- |      HERE       |
 -- +-----------------+
-function hs.window.down(win)
+function windowMT.down(win)
   local frame = win:screen():frame()
   frame.y = frame.y + frame.h/2
   frame.h = frame.h/2
@@ -213,7 +216,7 @@ end
 -- +--------+        |
 -- |                 |
 -- +-----------------+
-function hs.window.upLeft(win)
+function windowMT.upLeft(win)
   local frame = win:screen():frame()
   frame.h = frame.y + frame.h/2
   frame.w = frame.w/2
@@ -225,7 +228,7 @@ end
 -- +--------+        |
 -- |  HERE  |        |
 -- +-----------------+
-function hs.window.downLeft(win)
+function windowMT.downLeft(win)
   local frame = win:screen():frame()
   frame.y = frame.y + frame.h/2
   frame.h = frame.h/2
@@ -238,21 +241,21 @@ end
 -- |        +--------|
 -- |        |  HERE  |
 -- +-----------------+
-function hs.window.downRight(win)
+function windowMT.downRight(win)
   local frame = win:screen():frame()
   frame.y = frame.y + frame.h/2
   frame.x = frame.x + frame.w/2
   frame.h = frame.h/2
   frame.w = frame.w/2
   win:setFrame(frame)
-end
+end 
 
 -- +-----------------+
 -- |        |  HERE  |
 -- |        +--------|
 -- |                 |
 -- +-----------------+
-function hs.window.upRight(win)
+function windowMT.upRight(win)
   local frame = win:screen():frame()
   frame.x = frame.x + frame.w/2
   frame.h = frame.h/2
